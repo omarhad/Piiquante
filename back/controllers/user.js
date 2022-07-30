@@ -1,42 +1,45 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt'); // Bcrypt : gestionnaire de hashage
+const User = require('../models/User'); // User : modèle de données
+const jwt = require('jsonwebtoken'); // Json Web Token : token de sécurité
 
+// POST : Create a new user
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
+    bcrypt.hash(req.body.password, 10) // Hash the password
       .then(hash => {
+        // Create a new user
         const user = new User({
           email: req.body.email,
           password: hash
-        });
-        user.save()
-          .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-          .catch(error => res.status(400).json({ error }));
+        }); 
+        user.save() // Save the user in the database
+          .then(() => res.status(201).json({ message: 'Utilisateur créé !' })) // Send a 201 response if the user is created
+          .catch(error => res.status(400).json({ error })); // Send a 400 response if the user is not created
       })
-      .catch(error => res.status(500).json({ error }));
+      .catch(error => res.status(500).json({ error })); // Send a 500 response if the password is not hashed
 };
 
+// GET : Get all users
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+    User.findOne({ email: req.body.email }) // Find the user with the email
         .then(user => {
             if (!user) {
-                return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+                return res.status(401).json({ error: 'Utilisateur non trouvé !' }); // Send a 401 response if the user is not found
             }
-            bcrypt.compare(req.body.password, user.password)
+            bcrypt.compare(req.body.password, user.password) // Compare the password with the hashed password
                 .then(valid => {
                     if (!valid) {
-                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                        return res.status(401).json({ error: 'Mot de passe incorrect !' }); // Send a 401 response if the password is incorrect
                     }
                     res.status(200).json({
-                        userId: user._id,
+                        userId: user._id, 
                         token: jwt.sign(
-                            { userId: user._id },
-                            'RANDOM_TOKEN_SECRET',
-                            { expiresIn: '24h' }
+                            { userId: user._id }, // Create a token with the userId
+                            'RANDOM_TOKEN_SECRET', // Set the secret
+                            { expiresIn: '24h' } // Set the expiration date
                         )
-                    });
+                    }); // Send a 200 response if the password is correct
                 })
-                .catch(error => res.status(500).json({ error }));
+                .catch(error => res.status(500).json({ error })); // Send a 500 response if the password is not hashed
         })
-        .catch(error => res.status(500).json({ error }));
+        .catch(error => res.status(500).json({ error })); // Send a 500 response if the user is not found
  };
