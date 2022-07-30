@@ -57,14 +57,14 @@ exports.rateSauce = (req, res, next) => {
         }
         // Save the changes in the database
         Sauce.updateOne(
-            {_id: req.params.id},
+            {_id: req.params.id}, // Find the sauce
             {
             likes: sauce.likes,
             dislikes: sauce.dislikes,
             usersLiked: sauce.usersLiked,
             usersDisliked: sauce.usersDisliked,
             _id: req.params.id
-            }
+            } // Update the sauce
         )
         .then(()=> res.status(200).json({message: "L'évaluation de la sauce a bien été mise à jour !"})) // Send a response with a status code 200 (OK)
         .catch(error => res.status(400).json({error})); // Send a response with a status code 400 (Bad Request)
