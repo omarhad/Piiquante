@@ -1,21 +1,30 @@
 const bcrypt = require('bcrypt'); // Bcrypt : gestionnaire de hashage
 const User = require('../models/User'); // User : modèle de données
 const jwt = require('jsonwebtoken'); // Json Web Token : token de sécurité
+const CryptoJS = require('crypto-js'); // CryptoJS : gestionnaire de hashage
+
+// Regex for the adress email
+const emailRegex = (email) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+
 
 // POST : Create a new user
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10) // Hash the password
-      .then(hash => {
-        // Create a new user
-        const user = new User({
-          email: req.body.email,
-          password: hash
-        }); 
-        user.save() // Save the user in the database
-          .then(() => res.status(201).json({ message: 'Utilisateur créé !' })) // Send a 201 response if the user is created
-          .catch(error => res.status(400).json({ error })); // Send a 400 response if the user is not created
-      })
-      .catch(error => res.status(500).json({ error })); // Send a 500 response if the password is not hashed
+    if (!emailRegex(req.body.email)) {
+        res.status(400).json({message: "Le format de l'email n'est pas valide."})
+    } else {
+        bcrypt.hash(req.body.password, 10) // Hash the password
+        .then(hash => {
+            // Create a new user
+            const user = new User({
+            email: req.body.email,
+            password: hash
+            }); 
+            user.save() // Save the user in the database
+            .then(() => res.status(201).json({ message: 'Utilisateur créé !' })) // Send a 201 response if the user is created
+            .catch(error => res.status(400).json({ error })); // Send a 400 response if the user is not created
+        })
+        .catch(error => res.status(500).json({ error })); // Send a 500 response if the password is not hashed
+    };
 };
 
 // GET : Get all users
