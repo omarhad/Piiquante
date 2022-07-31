@@ -1,4 +1,5 @@
 const express = require('express'); // Express : framework web
+const dotenv = require("dotenv"); // Dotenv : gestionnaire de variables d'environnement
 const mongoose = require('mongoose'); // MongoDB : gestionnaire de base de données
 
 const path = require('path'); // Path : gestionnaire de chemins
@@ -7,8 +8,10 @@ const app = express(); // Create an instance of express
 const userRoutes = require('./routes/user'); // Import the user routes
 const sauceRoutes = require('./routes/sauce'); // Import the sauce routes
 
+dotenv.config(); // Load the .env file
+
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://Omar-had:270495Oh.@cluster0.38uxqox.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(process.env.MONGODB_SRV,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))

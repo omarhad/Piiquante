@@ -34,7 +34,7 @@ exports.login = (req, res, next) => {
                         userId: user._id, 
                         token: jwt.sign(
                             { userId: user._id }, // Create a token with the userId
-                            'RANDOM_TOKEN_SECRET', // Set the secret
+                            process.env.TOKEN_SECRET, // Set the secret
                             { expiresIn: '24h' } // Set the expiration date
                         )
                     }); // Send a 200 response if the password is correct
