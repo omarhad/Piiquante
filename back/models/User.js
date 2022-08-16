@@ -1,6 +1,6 @@
-const mongoose = require('mongoose'); // MongoDB : gestionnaire de base de données
+const mongoose = require('mongoose'); // MongoDB : database manager
 
-const uniqueValidator = require('mongoose-unique-validator'); // Mongoose : validation de données
+const uniqueValidator = require('mongoose-unique-validator'); // Mongoose: data validation
 
 // Create a user schema
 const userShema = mongoose.Schema({

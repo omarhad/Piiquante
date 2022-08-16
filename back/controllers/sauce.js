@@ -70,7 +70,7 @@ exports.rateSauce = (req, res, next) => {
         .catch(error => res.status(400).json({error})); // Send a response with a status code 400 (Bad Request)
     })
     .catch(error => res.status(404).json({error})); // Send a response with a status code 404 (Not Found)
-}
+};
 
 // DELETE : Delete a sauce
 exports.deleteSauce = (req, res, next) => {
@@ -97,9 +97,9 @@ exports.modifySauce = (req, res, next) => {
     Sauce.updateOne({ _id: req.params.id, _userId: req.auth.userId }, { ...sauceObject, _userId: req.auth.userId }) // Update the sauce
     .then(() => { res.status(200).json({message: 'Objet modifié !'})}) // Send a response with a status code 200 (OK)
     .catch(error => { res.status(400).json( { error })}) // Send a response with a status code 400 (Bad Request)
-}
+};
 
-// GET : Get all sauces
+// GET : Get one sauce
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({_id: req.params.id}) // Find the sauce
     .then(sauce => {
@@ -109,7 +109,7 @@ exports.getOneSauce = (req, res, next) => {
         res.status(400).json({error}); // Send a response with a status code 400 (Bad Request)
     }
     );
-}
+};
 
 // GET : Get all sauces
 exports.getAllSauces = (req, res, next) => {

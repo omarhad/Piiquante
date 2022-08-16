@@ -30,5 +30,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 From the back folder run `npm install`
 Change the name of the .env.example file to .env
-Modify the environment variables in the .env file
+Modify the environment variables in the .env file : 
+    MONGODB_SRV="mongodb+srv://Omar-had:AzErTy2020.@cluster0.38uxqox.mongodb.net/?retryWrites=true&w=majority"
+    TOKEN_SECRET="RANDOM_TOKEN_SECRET"
 To start the development servers run `nodemon server`
